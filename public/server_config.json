@@ -1,0 +1,4 @@
+{
+  "serverUrl": "http://localhost:3000",
+  "comment": "Enter your public cloud domain or tunnel URL here (e.g. https://imo-voiceclub.onrender.com) so all users and MasterAdmin.exe connect to the same server worldwide."
+}

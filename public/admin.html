@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IMO Club - Admin & Diamond Agent Central</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #0b0f17;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .admin-container {
+      width: 100%;
+      max-width: 900px;
+    }
+    .grid-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: #182232;
+      border: 1px solid #2a3b53;
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .stat-title {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .stat-val {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 6px;
+    }
+    .table-box {
+      background: #182232;
+      border: 1px solid #2a3b53;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid #2a3b53;
+    }
+    th {
+      color: #94a3b8;
+      font-weight: 700;
+    }
+    td {
+      color: #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <div>
+        <h1 style="color: #fff; font-size: 1.6rem; display: flex; align-items: center; gap: 8px;">
+          <span>imo</span>
+          <span style="background: #0084ff; padding: 4px 10px; border-radius: 8px; font-size: 0.9rem;">ADMIN CENTRAL</span>
+        </h1>
+        <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 4px;">Diamond Economy & Agent Management Portal</p>
+      </div>
+      <div>
+        <a href="/" style="background: #1e293b; color: #fff; text-decoration: none; padding: 10px 16px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; border: 1px solid #334155;">
+          📱 Open Mobile App
+        </a>
+      </div>
+    </div>
+
+    <!-- Overall Economy Analytics Cards -->
+    <div class="grid-stats">
+      <div class="stat-card" style="border-color: #0284c7;">
+        <div class="stat-title">💎 Total Diamond Price</div>
+        <div class="stat-val" style="color: var(--diamond-color);">රු. 2.00 / 💎</div>
+        <div style="font-size: 0.72rem; color: #7dd3fc; margin-top: 4px;">නිල පාරිභෝගික සිල්ලර මිල</div>
+      </div>
+      <div class="stat-card" style="border-color: #10b981;">
+        <div class="stat-title">💼 Agent Wholesale Cost</div>
+        <div class="stat-val" style="color: #10b981;">රු. 1.00 / 💎</div>
+        <div style="font-size: 0.72rem; color: #6ee7b7; margin-top: 4px;">Agent තොග මිල</div>
+      </div>
+      <div class="stat-card" style="border-color: #f59e0b;">
+        <div class="stat-title">💰 Agent Profit Margin</div>
+        <div class="stat-val" style="color: #fbbf24;">රු. 1.00 (50%)</div>
+        <div style="font-size: 0.72rem; color: #fde68a; margin-top: 4px;">එක් Diamond එකකින් Agent ලාභය</div>
+      </div>
+      <div class="stat-card" style="border-color: #ec4899;">
+        <div class="stat-title">🛡️ Registered Agents</div>
+        <div class="stat-val" id="adminTotalAgents">2 Active</div>
+        <div style="font-size: 0.72rem; color: #fbcfe8; margin-top: 4px;">සත්‍යාපිත Diamond වෙළෙන්දන්</div>
+      </div>
+    </div>
+
+    <!-- Section 1: Add New Diamond Seller Agent -->
+    <div class="table-box">
+      <h3 style="color: #fff; margin-bottom: 14px;">➕ නව Diamond Seller Agent කෙනෙකු ලියාපදිංචි කිරීම</h3>
+      <form id="addAgentForm" onsubmit="handleAddAgent(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+        <div>
+          <label style="font-size: 0.75rem; color: #94a3b8;">වෙළඳසැල් නාමය (Store Name):</label>
+          <input type="text" id="agentStoreName" class="chat-input" placeholder="උදා: Galle Diamond Hub" required style="width: 100%; border-radius: 10px; margin-top: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; color: #94a3b8;">නියෝජිතයාගේ නම (Agent Name):</label>
+          <input type="text" id="agentOwnerName" class="chat-input" placeholder="උදා: Kamal Perera" required style="width: 100%; border-radius: 10px; margin-top: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; color: #94a3b8;">දුරකථන අංකය (Phone):</label>
+          <input type="text" id="agentPhone" class="chat-input" placeholder="+94770001122" required style="width: 100%; border-radius: 10px; margin-top: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; color: #94a3b8;">WhatsApp අංකය:</label>
+          <input type="text" id="agentWhatsApp" class="chat-input" placeholder="+94770001122" required style="width: 100%; border-radius: 10px; margin-top: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; color: #94a3b8;">නගරය / පළාත (City):</label>
+          <input type="text" id="agentCity" class="chat-input" placeholder="Galle / Southern" required style="width: 100%; border-radius: 10px; margin-top: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; color: #94a3b8;">ආරම්භක තොගය (Initial Diamonds):</label>
+          <input type="number" id="agentStock" class="chat-input" value="5000" required style="width: 100%; border-radius: 10px; margin-top: 4px;">
+        </div>
+        <div style="grid-column: 1 / -1; margin-top: 6px;">
+          <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #0084ff, #0066cc);">
+            🛡️ නව Diamond Agent සක්‍රීය කරන්න (Add & Verify Agent)
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Section 2: Registered Diamond Seller Agents Table -->
+    <div class="table-box">
+      <h3 style="color: #fff; margin-bottom: 14px;">📋 ලියාපදිංචි Diamond Agents ලැයිස්තුව</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Agent ID</th>
+            <th>වෙළඳසැල & හිමිකරු</th>
+            <th>නගරය & දුරකථන</th>
+            <th>තොගය (Stock)</th>
+            <th>විකිණූ ප්‍රමාණය</th>
+            <th>Agent උපයාගත් ලාභය</th>
+            <th>තත්ත්වය</th>
+          </tr>
+        </thead>
+        <tbody id="adminAgentsTableBody">
+          <!-- Dynamic -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Section 3: Recent Transactions Across Platform -->
+    <div class="table-box">
+      <h3 style="color: #fff; margin-bottom: 14px;">📜 සියලුම Diamond ගනුදෙනු (Audit Log)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>TXN ID</th>
+            <th>Agent</th>
+            <th>පාරිභෝගිකයා (User)</th>
+            <th>Diamonds</th>
+            <th>පාරිභෝගික මුදල</th>
+            <th>Agent ලාභය</th>
+            <th>දිනය</th>
+          </tr>
+        </thead>
+        <tbody id="adminTxnTableBody">
+          <!-- Dynamic -->
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div id="toast" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 18px; border-radius: 20px; border: 1px solid var(--accent-gold); font-size: 0.8rem; z-index: 200;"></div>
+
+  <script>
+    async function loadAdminData() {
+      try {
+        const res = await fetch('/api/data');
+        const data = await res.json();
+
+        document.getElementById('adminTotalAgents').innerText = `${data.agents.length} Active`;
+
+        // Agents Table
+        const tbody = document.getElementById('adminAgentsTableBody');
+        tbody.innerHTML = data.agents.map(a => `
+          <tr>
+            <td><b style="color: #38bdf8;">${a.id}</b></td>
+            <td><b>${a.name}</b><br><span style="font-size: 0.72rem; color: #94a3b8;">${a.agentName}</span></td>
+            <td>${a.city}<br><span style="font-size: 0.72rem; color: #94a3b8;">${a.phone}</span></td>
+            <td><b style="color: var(--diamond-color);">${a.diamondsStock.toLocaleString()} 💎</b></td>
+            <td>${a.totalSold.toLocaleString()} 💎</td>
+            <td><b style="color: #10b981;">රු. ${a.totalProfitLKR.toLocaleString()}</b></td>
+            <td><span class="verified-tag">VERIFIED</span></td>
+          </tr>
+        `).join('');
+
+        // Txn Table
+        const txnBody = document.getElementById('adminTxnTableBody');
+        txnBody.innerHTML = data.agentTransactions.map(t => `
+          <tr>
+            <td><code>${t.id}</code></td>
+            <td>${t.agentId}</td>
+            <td><b>${t.userName}</b> (${t.userId})</td>
+            <td><b style="color: var(--diamond-color);">+${t.diamonds} 💎</b></td>
+            <td>රු. ${t.customerPriceLKR.toLocaleString()}</td>
+            <td><b style="color: #10b981;">රු. ${t.agentProfitLKR.toLocaleString()}</b></td>
+            <td><span style="font-size: 0.72rem; color: #94a3b8;">${t.date}</span></td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function handleAddAgent(e) {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById('agentStoreName').value,
+        agentName: document.getElementById('agentOwnerName').value,
+        phone: document.getElementById('agentPhone').value,
+        whatsapp: document.getElementById('agentWhatsApp').value,
+        city: document.getElementById('agentCity').value,
+        initialDiamonds: document.getElementById('agentStock').value
+      };
+
+      try {
+        const res = await fetch('/api/admin/agents/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        if (d.success) {
+          showAdminToast(`🎉 නව Diamond Agent ${d.agent.name} සාර්ථකව ඇතුළත් කරන ලදී!`);
+          document.getElementById('addAgentForm').reset();
+          loadAdminData();
+        }
+      } catch (err) {
+        showAdminToast(`⚠️ දෝෂයක්: ${err.message}`);
+      }
+    }
+
+    function showAdminToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 3200);
+    }
+
+    window.onload = loadAdminData;
+  </script>
+</body>
+</html>

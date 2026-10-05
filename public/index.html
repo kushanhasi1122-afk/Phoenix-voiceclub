@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Phoenix Voice Club</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="app-icon.png">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+  <!-- Floating Hearts Container -->
+  <div class="floating-hearts-container" id="heartsContainer"></div>
+
+  <!-- Big Gift Broadcast Screen Overlay -->
+  <div id="giftBroadcastOverlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 150; align-items: center; justify-content: center; flex-direction: column;">
+    <div id="flyingGiftIcon" style="font-size: 6rem; transition: transform 0.3s;">🌹</div>
+    <div id="giftBroadcastBanner" style="background: rgba(15, 23, 42, 0.95); border: 2px solid var(--accent-gold); border-radius: 20px; padding: 12px 24px; color: #fff; font-weight: 700; font-size: 0.95rem; text-align: center; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);"></div>
+  </div>
+
+  <!-- App Mobile Frame -->
+  <div class="app-container">
+
+    <!-- Grand Entrance Notice Banner -->
+    <div class="entrance-notice-banner" id="entranceBanner">
+      <span style="font-size: 1.8rem;" id="entranceAvatar">✨</span>
+      <div>
+        <div style="font-size: 0.82rem; font-weight: 700; color: #fff;" id="entranceName">Member Name</div>
+        <div style="font-size: 0.68rem; color: #fde68a;">Phoenix Voice Club එකට සාදරයෙන් පිළිගනිමු! 🌟</div>
+      </div>
+    </div>
+
+    <!-- Top App Header -->
+    <header class="app-header">
+      <div class="brand" style="display: flex; align-items: center; gap: 8px;">
+        <img src="app-icon.png" alt="Phoenix" style="width: 32px; height: 32px; border-radius: 8px; object-fit: cover; box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);" />
+        <span style="font-weight: 800; background: linear-gradient(135deg, #fbbf24, #f87171); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Phoenix</span>
+        <span class="brand-badge" id="appRoleBadge">CLUB</span>
+      </div>
+      <div class="header-actions">
+        <!-- Server Connection Status Pill & Config -->
+        <div class="data-saver-pill" id="serverStatusPill" onclick="openServerConfigModal()" title="සර්වර් තත්ත්වය සහ සැකසුම් (Server Settings)" style="cursor: pointer;">
+          <span id="serverStatusDot" style="width: 8px; height: 8px; border-radius: 50%; background: #eab308; display: inline-block;"></span>
+          <span id="serverStatusText" style="font-size: 0.7rem;">Connecting...</span>
+        </div>
+        <!-- APK Download Button -->
+        <a href="/Phoenix-VoiceClub.apk" download="Phoenix-VoiceClub.apk" class="data-saver-pill" style="background: rgba(0, 132, 255, 0.15); border-color: #0084ff; color: #38bdf8; text-decoration: none;" title="Download Android APK">
+          <span>📲</span> APK
+        </a>
+        <!-- Data Saver Pill -->
+        <div class="data-saver-pill active" id="dataSaverBtn" title="අඩු Mobile Data තාක්ෂණය (Data Saver)">
+          <span>📶</span> <span id="dataSaverText">Low Data</span>
+        </div>
+        <!-- User Diamond Count -->
+        <div class="diamond-badge" id="headerDiamondBadge" onclick="switchTab('diamonds')">
+          <span>💎</span>
+          <span id="userDiamondCount">0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Screens -->
+    <main class="app-content">
+
+      <!-- TAB 1: VOICE CLUB SCREEN (10 SEATS) -->
+      <section class="tab-screen active" id="tab-voiceclub">
+        
+        <!-- Room Selector & Header with Edit Title -->
+        <div class="room-header">
+          <div class="room-title-box">
+            <div class="room-title-row">
+              <div class="room-title" id="roomTitle">🇱🇰 Sri Lanka Voice Club 1</div>
+              <button class="edit-room-name-btn" id="editRoomTitleBtn" onclick="openEditRoomTitlePrompt()" title="කාමරයේ නම වෙනස් කරන්න">✏️</button>
+            </div>
+            <div class="room-stats">
+              <span>👥 <b id="roomOnlineCount">0</b> Listeners</span>
+              <span>💖 <b id="roomHeartsCount">0</b> Hearts</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="action-btn-circle" onclick="openMembersModal()" title="සාමාජිකයන් බලන්න">👥</button>
+            <button class="action-btn-circle" onclick="openRoomListModal()" title="කාමර මාරු කරන්න">🌐</button>
+            <button class="action-btn-circle" onclick="openShareModal()" title="Share Link">🔗</button>
+          </div>
+        </div>
+
+        <!-- Room Role Indicator Bar -->
+        <div id="roomRoleBar" style="background: #1e293b; padding: 6px 14px; font-size: 0.72rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <span style="color: #94a3b8;" id="myRoomStatusText">🎧 ඔබ දැනට සවන්දෙන්නෙකු (Listener) ලෙස සිටී</span>
+          <span style="color: var(--accent-gold); font-weight: 700;" id="roomAdminCountText">Admins: 0 / 100</span>
+        </div>
+
+        <!-- Relationship & Intimacy Spotlight -->
+        <div class="intimacy-spotlight" onclick="openIntimacyModal()">
+          <div class="cp-avatars">
+            <div class="cp-avatar" id="cpAvatar1">👑</div>
+            <div class="cp-avatar" id="cpAvatar2">❤️</div>
+          </div>
+          <div class="cp-info">
+            <div class="cp-title">
+              <span>❤️ Relationship & Intimacy Space</span>
+              <span class="rel-tag-cp" id="cpLevelTag">Lv. 1 Intimacy</span>
+            </div>
+            <div class="cp-intimacy-meter">
+              <div class="meter-bar">
+                <div class="meter-fill" id="cpMeterFill" style="width: 25%;"></div>
+              </div>
+              <span class="meter-text" id="cpPointsText">0 Pts</span>
+            </div>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--accent-gold);">✨ විස්තර</div>
+        </div>
+
+        <!-- 10 MICROPHONE STAGE (2 Rows x 5 Seats) -->
+        <div class="stage-area">
+          <div class="seats-10-grid" id="seats10Grid">
+            <!-- 10 Seats dynamically rendered with adjacent intimacy holding-hand/heart links -->
+          </div>
+        </div>
+
+        <!-- Live Chat Box -->
+        <div class="room-activity-panel">
+          <div class="chat-messages-box" id="chatBox">
+            <div class="chat-system-event">
+              <span>📶 Ultra Low Data Mode සක්‍රීයයි (Opus Low Bitrate)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Room Action Bar -->
+        <div class="room-action-bar">
+          <input type="text" class="chat-input" id="chatInput" placeholder="පණිවිඩයක් ලියන්න..." onkeypress="handleChatKeyPress(event)">
+          <!-- Toggle Mic -->
+          <button class="action-btn-circle" id="micBtn" onclick="toggleMic()" title="Mic On/Off">
+            <span id="micIcon">🎙️</span>
+          </button>
+          <!-- Friendship Hand -->
+          <button class="action-btn-circle btn-friendship" onclick="openFriendshipModal()" title="Friendship Hand">
+            <span>🤝</span>
+          </button>
+          <!-- Floating Heart -->
+          <button class="action-btn-circle btn-heart" onclick="sendHeart()" title="Heart යවන්න">
+            <span>💖</span>
+          </button>
+          <!-- Send Gift -->
+          <button class="action-btn-circle btn-gift" onclick="openGiftModal()" title="Gift යවන්න">
+            <span>🎁</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- TAB 2: MEMBERS TAB -->
+      <section class="tab-screen" id="tab-chats">
+        <div class="card-box" style="margin-top: 14px;">
+          <h3 style="margin-bottom: 12px; color: #fff;">👥 සාමාජිකයන් (Members Directory)</h3>
+          <div id="chatsList"></div>
+        </div>
+      </section>
+
+      <!-- TAB 3: DIAMONDS TAB -->
+      <section class="tab-screen" id="tab-diamonds">
+        <div class="card-box balance-card">
+          <div class="balance-title">ඔබේ DIAMOND ශේෂය</div>
+          <div class="balance-amount">
+            <span>💎</span>
+            <span id="storeDiamondBalance">0</span>
+          </div>
+        </div>
+
+        <!-- Verified Diamond Sellers List -->
+        <div class="card-box">
+          <h4 style="color: #fff; margin-bottom: 8px;">🛡️ නිල Diamond Sellers (Agents)</h4>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">
+            ඔබේ Mobile Number එකට Diamonds ලබාගැනීමට පහත Seller කෙනෙකු අමතන්න:
+          </p>
+          <div id="agentsDirectoryList"></div>
+        </div>
+      </section>
+
+      <!-- TAB 4: SELLER DASHBOARD TAB -->
+      <section class="tab-screen" id="tab-agent">
+        <div id="sellerDashboardContent"></div>
+      </section>
+
+      <!-- TAB 5: PROFILE TAB -->
+      <section class="tab-screen" id="tab-profile">
+        <div class="card-box" style="text-align: center;">
+          <div style="font-size: 3.5rem; margin-bottom: 4px;" id="profileAvatar">👤</div>
+          <h3 id="profileName" style="color: #fff;">Member Name</h3>
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;" id="profilePhone">+94...</div>
+          <div style="font-size: 0.75rem; color: #38bdf8; margin-top: 4px;" id="profileBio">Bio</div>
+          
+          <div style="display: flex; justify-content: center; gap: 8px; margin-top: 10px;">
+            <button class="action-btn-circle" style="width: auto; padding: 0 14px; border-radius: 12px; font-size: 0.75rem;" onclick="openProfileEditModal()">
+              ✏️ Profile වෙනස් කරන්න
+            </button>
+            <button class="action-btn-circle" style="width: auto; padding: 0 14px; border-radius: 12px; font-size: 0.75rem; background: #ef4444;" onclick="logout()">
+              🚪 Logout
+            </button>
+          </div>
+        </div>
+
+        <!-- APK Download Card -->
+        <div class="card-box" style="background: linear-gradient(135deg, #1e293b, #0f2744); border-color: #0284c7;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h4 style="color: #fff;">📲 Android APK එක බාගත කරන්න</h4>
+              <p style="font-size: 0.72rem; color: #94a3b8; margin-top: 2px;">Phone එකට Install කරගන්න (Phoenix-VoiceClub.apk)</p>
+            </div>
+            <a href="/Phoenix-VoiceClub.apk" download="Phoenix-VoiceClub.apk" class="btn-primary" style="width: auto; padding: 8px 14px; font-size: 0.8rem; text-decoration: none;">
+              📥 Download
+            </a>
+          </div>
+        </div>
+
+        <div class="card-box">
+          <h4 style="color: #ff4d6d; margin-bottom: 8px;">❤️ මගේ සබඳතා (My Relationships)</h4>
+          <div id="profileRelationshipsList"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar (No Master Tab - Strictly Private via Exe) -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="switchTab('voiceclub')">
+        <span class="icon">🎙️</span>
+        <span>Voice Club</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('chats')">
+        <span class="icon">💬</span>
+        <span>Members</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('diamonds')">
+        <span class="icon">💎</span>
+        <span>Diamonds</span>
+      </button>
+      <button class="nav-item" id="navSellerBtn" onclick="switchTab('agent')">
+        <span class="icon">💼</span>
+        <span>Seller</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('profile')">
+        <span class="icon">👤</span>
+        <span>Profile</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- MODAL: LOGIN / SIGNUP MODAL (1 PHONE = 1 ACCOUNT) -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-sheet">
+      <div style="text-align: center; margin-bottom: 16px;">
+        <img src="app-icon.png" alt="Phoenix Voice Club" style="width: 76px; height: 76px; border-radius: 20px; object-fit: cover; box-shadow: 0 0 20px rgba(245, 158, 11, 0.6); margin-bottom: 8px;" />
+        <h2 style="color: #fff; margin-top: 4px; background: linear-gradient(135deg, #fbbf24, #f87171); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Phoenix Voice Club</h2>
+        <p style="font-size: 0.75rem; color: var(--text-muted);">දුරකථන අංකය මඟින් පිවිසෙන්න</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div>
+          <label style="font-size: 0.75rem; color: #94a3b8;">දුරකථන අංකය (Mobile Number):</label>
+          <input type="tel" id="loginPhoneInput" class="chat-input" placeholder="+94771234567" style="width: 100%; border-radius: 12px; margin-top: 4px; font-size: 0.95rem;">
+        </div>
+
+        <div>
+          <label style="font-size: 0.75rem; color: #94a3b8;">ඔබගේ නම (Your Name):</label>
+          <input type="text" id="loginNameInput" class="chat-input" placeholder="උදා: Kasun Perera" style="width: 100%; border-radius: 12px; margin-top: 4px; font-size: 0.95rem;">
+        </div>
+
+        <button class="btn-primary" onclick="submitLogin()" style="margin-top: 8px;">
+          🚀 Login / ගිණුමට පිවිසෙන්න
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: MEMBERS & AUDIENCE LIST MODAL -->
+  <div class="modal-overlay" id="membersModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title">👥 කාමරයේ සිටින සාමාජිකයන් (Audience)</div>
+        <button class="modal-close" onclick="closeMembersModal()">✕</button>
+      </div>
+      <div id="modalMembersList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADJACENT SEATS INTIMACY INTERACTION (Holding Hands & Heart) -->
+  <div class="modal-overlay" id="seatIntimacyModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title" id="seatIntimacyModalTitle">🤝 Intimacy Connection</div>
+        <button class="modal-close" onclick="closeSeatIntimacyModal()">✕</button>
+      </div>
+      <div id="seatIntimacyModalBody"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: PROFILE EDIT -->
+  <div class="modal-overlay" id="profileEditModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title">✏️ Profile වෙනස් කරන්න</div>
+        <button class="modal-close" onclick="closeProfileEditModal()">✕</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div>
+          <label style="font-size: 0.75rem; color: #94a3b8;">ඔබේ නම (Name):</label>
+          <input type="text" id="editProfileName" class="chat-input" style="width: 100%; border-radius: 10px; margin-top: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; color: #94a3b8;">Avatar Emoji:</label>
+          <div style="display: flex; gap: 8px; margin-top: 6px; font-size: 1.6rem; cursor: pointer;">
+            <span onclick="selectAvatarEmoji('👤')">👤</span>
+            <span onclick="selectAvatarEmoji('👨')">👨</span>
+            <span onclick="selectAvatarEmoji('👩')">👩</span>
+            <span onclick="selectAvatarEmoji('👧')">👧</span>
+            <span onclick="selectAvatarEmoji('🧔')">🧔</span>
+            <span onclick="selectAvatarEmoji('👑')">👑</span>
+            <span onclick="selectAvatarEmoji('🌹')">🌹</span>
+            <span onclick="selectAvatarEmoji('💎')">💎</span>
+          </div>
+          <input type="text" id="editProfileAvatar" class="chat-input" style="width: 60px; text-align: center; margin-top: 6px; font-size: 1.2rem;" value="👤">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; color: #94a3b8;">Bio / Status:</label>
+          <input type="text" id="editProfileBio" class="chat-input" style="width: 100%; border-radius: 10px; margin-top: 4px;">
+        </div>
+        <button class="btn-primary" onclick="submitProfileUpdate()">
+          💾 සුරකින්න (Save Changes)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ROOM LIST -->
+  <div class="modal-overlay" id="roomListModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title">🌐 Voice Rooms ලැයිස්තුව</div>
+        <button class="modal-close" onclick="closeRoomListModal()">✕</button>
+      </div>
+      <div style="margin-bottom: 12px;">
+        <button class="btn-primary" onclick="openCreateRoomPrompt()" style="background: linear-gradient(135deg, #10b981, #059669);">
+          ➕ අලුත් Voice Room එකක් සාදන්න
+        </button>
+      </div>
+      <div id="allRoomsContainer" style="display: flex; flex-direction: column; gap: 8px;"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: ROOM MODERATION & USER ACTIONS -->
+  <div class="modal-overlay" id="userActionModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title" id="actionModalUserTitle">👤 Member Profile</div>
+        <button class="modal-close" onclick="closeUserActionModal()">✕</button>
+      </div>
+      <div id="userActionModalBody"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: 13 GIFTS (NO MONEY / CURRENCY PRICES SHOWN) -->
+  <div class="modal-overlay" id="giftModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title">🎁 තෑගි යවන්න (Send Gifts)</div>
+        <button class="modal-close" onclick="closeGiftModal()">✕</button>
+      </div>
+      <div style="background: rgba(0, 210, 255, 0.1); border: 1px solid var(--diamond-color); border-radius: 12px; padding: 8px 12px; margin-bottom: 10px; display: flex; justify-content: space-between; font-size: 0.78rem;">
+        <span>ඔබේ ශේෂය: <b style="color: var(--diamond-color);" id="modalGiftUserDiamonds">0 💎</b></span>
+        <span style="color: #6ee7b7; font-size: 0.72rem;">✨ ලබන්නාට 50% ක් ලැබේ!</span>
+      </div>
+      <div style="margin-bottom: 10px;">
+        <label style="font-size: 0.72rem; color: #94a3b8;">තෑග්ග ලබන්නා (Receiver):</label>
+        <select id="giftReceiverSelect" class="chat-input" style="width: 100%; border-radius: 10px; margin-top: 4px;"></select>
+      </div>
+      <!-- 13 Gifts Grid -->
+      <div class="gift-grid" id="giftGrid">
+        <div class="gift-card selected" onclick="selectGift(1, 'Rose', '🌹', 1)">
+          <div class="gift-icon">🌹</div>
+          <div class="gift-name">Rose</div>
+          <div class="gift-price">💎 1</div>
+        </div>
+        <div class="gift-card" onclick="selectGift(2, 'Teddy Bear', '🧸', 1)">
+          <div class="gift-icon">🧸</div>
+          <div class="gift-name">Teddy Bear</div>
+          <div class="gift-price">💎 1</div>
+        </div>
+        <div class="gift-card" onclick="selectGift(3, 'Crown', '👑', 1)">
+          <div class="gift-icon">👑</div>
+          <div class="gift-name">Crown</div>
+          <div class="gift-price">💎 1</div>
+        </div>
+        <div class="gift-card" onclick="selectGift(4, 'Bomb', '💣', 2)">
+          <div class="gift-icon">💣</div>
+          <div class="gift-name">Bomb</div>
+          <div class="gift-price">💎 2</div>
+        </div>
+        <div class="gift-card" onclick="selectGift(5, 'Heart', '💖', 5)">
+          <div class="gift-icon">💖</div>
+          <div class="gift-name">Heart</div>
+          <div class="gift-price">💎 5</div>
+        </div>
+        <div class="gift-card" onclick="selectGift(6, 'Big Heart', '❤️', 100)">
+          <div class="gift-icon">❤️</div>
+          <div class="gift-name">Big Heart</div>
+          <div class="gift-price">💎 100</div>
+        </div>
+        <div class="gift-card" onclick="selectGift(7, 'Golden Tree', '🌳', 200)">
+          <div class="gift-icon">🌳</div>
+          <div class="gift-name">Golden Tree</div>
+          <div class="gift-price">💎 200</div>
+        </div>
+        <div class="gift-card" onclick="selectGift(8, 'Flower Box', '💐', 500)">
+          <div class="gift-icon">💐</div>
+          <div class="gift-name">Flower Box</div>
+          <div class="gift-price">💎 500</div>
+        </div>
+        <div class="gift-card" onclick="selectGift(9, 'King', '🤴', 650)">
+          <div class="gift-icon">🤴</div>
+          <div class="gift-name">King</div>
+          <div class="gift-price">💎 650</div>
+        </div>
+        <div class="gift-card" onclick="selectGift(10, 'Rose Ring', '💍', 700)">
+          <div class="gift-icon">💍</div>
+          <div class="gift-name">Rose Ring</div>
+          <div class="gift-price">💎 700</div>
+        </div>
+        <div class="gift-card" onclick="selectGift(11, 'Rocket', '🚀', 1000)">
+          <div class="gift-icon">🚀</div>
+          <div class="gift-name">Rocket</div>
+          <div class="gift-price">💎 1,000</div>
+        </div>
+        <div class="gift-card" onclick="selectGift(12, 'Wedding', '💒', 2500)">
+          <div class="gift-icon">💒</div>
+          <div class="gift-name">Wedding</div>
+          <div class="gift-price">💎 2,500</div>
+        </div>
+        <div class="gift-card" onclick="selectGift(13, 'Castle in the Sky', '🏰', 5000)">
+          <div class="gift-icon">🏰</div>
+          <div class="gift-name">Castle Sky</div>
+          <div class="gift-price">💎 5,000</div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="sendSelectedGift()">
+        🚀 Gift එක යවන්න (+Intimacy & 50% Reward)
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: FRIENDSHIP HAND -->
+  <div class="modal-overlay" id="friendshipModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title">🤝 Friendship Hand (අතට අත දීම)</div>
+        <button class="modal-close" onclick="closeFriendshipModal()">✕</button>
+      </div>
+      <div class="shake-hands-anim">🤝</div>
+      <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">
+        මිතුරෙකුට අතට අත දීමෙන් ඔබ දෙදෙනාගේ <b>Intimacy Points 25 කින්</b> ඉහළ යයි!
+      </p>
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 0.72rem; color: #94a3b8;">මිතුරා තෝරන්න:</label>
+        <select id="friendshipTargetSelect" class="chat-input" style="width: 100%; border-radius: 10px; margin-top: 4px;"></select>
+      </div>
+      <button class="btn-primary" onclick="submitFriendshipHand()" style="background: linear-gradient(135deg, #3a86ff, #4361ee);">
+        🤝 අතට අත දෙන්න (Shake Hand)
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: INTIMACY DETAILS -->
+  <div class="modal-overlay" id="intimacyModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title">❤️ Relationship & Intimacy</div>
+        <button class="modal-close" onclick="closeIntimacyModal()">✕</button>
+      </div>
+      <div style="background: rgba(255, 77, 109, 0.15); border: 1px solid #ff4d6d; border-radius: 14px; padding: 14px; margin-bottom: 12px; text-align: center;">
+        <div style="font-size: 2.2rem; margin-bottom: 4px;">💑</div>
+        <h3 style="color: #ff85a1;" id="modalCpPairNames">Couple Space</h3>
+        <span class="rel-tag-cp" id="modalCpBadge">Lv. 1 Intimacy</span>
+        <div style="margin-top: 8px;">
+          <div class="meter-bar" style="height: 8px;">
+            <div class="meter-fill" id="modalCpFill" style="width: 25%;"></div>
+          </div>
+          <div style="font-size: 0.75rem; color: var(--accent-gold); margin-top: 4px;" id="modalCpScore">
+            Intimacy Points: 0 Pts
+          </div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="closeIntimacyModal(); openGiftModal();">
+        💖 Gift යවා Intimacy වැඩිකරන්න
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: SERVER CONFIG -->
+  <div class="modal-overlay" id="serverConfigModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title">🌐 Cloud Server Settings</div>
+        <button class="modal-close" onclick="closeServerConfigModal()">✕</button>
+      </div>
+      <div style="padding: 10px 0;">
+        <p style="font-size: 0.78rem; color: #94a3b8; margin-bottom: 12px; line-height: 1.4;">
+          Download කළ සියලු දෙනාටම එකම සර්වරය හරහා සම්බන්ධ වී Voice Club, Live Chat, Gifts සහ Diamonds භාවිත කිරීමට Cloud Server Domain එක සකසන්න.
+        </p>
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.75rem; color: #cbd5e1; display: block; margin-bottom: 5px;">Server Status:</label>
+          <div id="modalServerStatusDisplay" style="font-size: 0.85rem; font-weight: 600; color: #eab308; background: #0f172a; padding: 8px 12px; border-radius: 8px; border: 1px solid #334155;">
+            🟡 Connecting to Server...
+          </div>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 0.75rem; color: #cbd5e1; display: block; margin-bottom: 5px;">Cloud Server URL / Domain:</label>
+          <input type="text" id="serverDomainInput" class="chat-input" style="width: 100%; border-radius: 10px;" placeholder="e.g. https://imo-voiceclub.onrender.com" />
+          <span style="font-size: 0.68rem; color: #64748b; margin-top: 4px; display: block;">* කිසිදු IP address එකක් ඇතුළත් කිරීමට අවශ්‍ය නැත. Domain නාමය භාවිත කරන්න.</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-primary" onclick="saveServerConfig()" style="flex: 2;">
+            💾 සුරකින්න & Connect
+          </button>
+          <button class="btn-primary" onclick="resetServerConfig()" style="flex: 1; background: #334155; border-color: #475569;">
+            🔄 Default
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 18px; border-radius: 20px; border: 1px solid var(--accent-gold); font-size: 0.8rem; z-index: 250; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

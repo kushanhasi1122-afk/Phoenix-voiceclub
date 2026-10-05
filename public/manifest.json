@@ -1,0 +1,16 @@
+{
+  "name": "Phoenix Voice Club",
+  "short_name": "Phoenix",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0f17",
+  "theme_color": "#f59e0b",
+  "description": "Phoenix Voice Club with 10 Mic Seats, Intimacy CP, Gifts and Diamond Agents",
+  "icons": [
+    {
+      "src": "app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

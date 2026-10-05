@@ -1,0 +1,174 @@
+{
+  "users": [
+    {
+      "id": "USR-MASTER",
+      "phone": "+94770000000",
+      "name": "Master Owner 👑",
+      "avatar": "👑",
+      "bio": "Official App Owner & Master Administrator",
+      "diamonds": 999999999,
+      "beans": 999999999,
+      "role": "master",
+      "createdAt": "2026-10-04"
+    },
+    {
+      "id": "USR-510980",
+      "phone": "+94715554433",
+      "name": "Charith Dias",
+      "avatar": "👤",
+      "bio": "",
+      "diamonds": 0,
+      "beans": 0,
+      "role": "user",
+      "createdAt": "2026-10-04"
+    },
+    {
+      "id": "USR-561610",
+      "phone": "+94771234567",
+      "name": "Member 4567",
+      "avatar": "👤",
+      "bio": "",
+      "diamonds": 200,
+      "beans": 0,
+      "role": "user",
+      "createdAt": "2026-10-04"
+    }
+  ],
+  "sellers": [
+    {
+      "id": "SEL-101",
+      "phone": "+94771112233",
+      "name": "Kamal Perera",
+      "storeName": "Lanka Diamond Express",
+      "city": "Colombo",
+      "whatsapp": "+94771112233",
+      "diamondsStock": 25000,
+      "totalSold": 0,
+      "totalProfitLKR": 0,
+      "isVerified": true,
+      "joinedAt": "2026-10-04"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "room-global-1",
+      "title": "🔥 Phoenix Voice Club 1 | Official Lounge 🎵",
+      "category": "Chat & Music",
+      "ownerId": "USR-MASTER",
+      "ownerPhone": "+94770000000",
+      "ownerName": "Master Owner 👑",
+      "admins": [],
+      "banned24h": {},
+      "permanentBanned": [],
+      "blocked": [],
+      "seats": [
+        {
+          "index": 1,
+          "userId": null,
+          "userName": null,
+          "avatar": null,
+          "phone": null,
+          "isMuted": false,
+          "isSpeaking": false,
+          "role": "host"
+        },
+        {
+          "index": 2,
+          "userId": null,
+          "userName": null,
+          "avatar": null,
+          "phone": null,
+          "isMuted": false,
+          "isSpeaking": false,
+          "role": null
+        },
+        {
+          "index": 3,
+          "userId": null,
+          "userName": null,
+          "avatar": null,
+          "phone": null,
+          "isMuted": false,
+          "isSpeaking": false,
+          "role": null
+        },
+        {
+          "index": 4,
+          "userId": null,
+          "userName": null,
+          "avatar": null,
+          "phone": null,
+          "isMuted": false,
+          "isSpeaking": false,
+          "role": null
+        },
+        {
+          "index": 5,
+          "userId": null,
+          "userName": null,
+          "avatar": null,
+          "phone": null,
+          "isMuted": false,
+          "isSpeaking": false,
+          "role": null
+        },
+        {
+          "index": 6,
+          "userId": null,
+          "userName": null,
+          "avatar": null,
+          "phone": null,
+          "isMuted": false,
+          "isSpeaking": false,
+          "role": null
+        },
+        {
+          "index": 7,
+          "userId": null,
+          "userName": null,
+          "avatar": null,
+          "phone": null,
+          "isMuted": false,
+          "isSpeaking": false,
+          "role": null
+        },
+        {
+          "index": 8,
+          "userId": null,
+          "userName": null,
+          "avatar": null,
+          "phone": null,
+          "isMuted": false,
+          "isSpeaking": false,
+          "role": null
+        },
+        {
+          "index": 9,
+          "userId": null,
+          "userName": null,
+          "avatar": null,
+          "phone": null,
+          "isMuted": false,
+          "isSpeaking": false,
+          "role": null
+        },
+        {
+          "index": 10,
+          "userId": null,
+          "userName": null,
+          "avatar": null,
+          "phone": null,
+          "isMuted": false,
+          "isSpeaking": false,
+          "role": null
+        }
+      ],
+      "audience": [],
+      "activeIntimacyLinks": [],
+      "heartsCount": 0
+    }
+  ],
+  "relationships": [],
+  "friendships": [],
+  "transactions": []
+}
